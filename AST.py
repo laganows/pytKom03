@@ -4,6 +4,8 @@ class Node(object):
     def __str__(self):
         return self.printTree()
 
+    def accept(self, visitor):
+        return visitor.visit(self)
 
 class Program(Node):
 
@@ -144,6 +146,7 @@ class BinExpr(Expression):
         self.expr1 = left
         self.operator = op
         self.expr2 = right
+        self.children = ( left, right )
 
 class ExpressionInPar(Expression):
     def __init__(self, expression, error):
@@ -163,9 +166,6 @@ class ExpressionList(Node):
             self.expressions.extend(expr_list.expressions)
         if expression:
             self.expressions.append(expression)
-
-# class Const(Node):
-#     pass
 
 class FunctionDefinitions(Node):
     def __init__(self, fundef, fundefs):
