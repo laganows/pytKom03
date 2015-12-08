@@ -244,9 +244,9 @@ class Cparser(object):
                 p[0] = AST.BinExpr(p[1], p[2], p[3])
         else:
             if isinstance(p[3], AST.ExpressionList):
-                p[0] = AST.IdWithPar(p[1], p[3], None)
+                p[0] = AST.FunctionCall(p[1], p[3], None)
             else:
-                p[0] = AST.IdWithPar(p[1], None, p[3])
+                p[0] = AST.FunctionCall(p[1], None, p[3])
         p[0].line = self.scanner.lexer.lineno
 
     def p_expr_list_or_empty(self, p):

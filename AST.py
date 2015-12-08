@@ -29,14 +29,6 @@ class Init(Node):
         self.id = id
         self.expression = expression
 
-class Declarations(Node):
-    def __init__(self, declarations, declaration):
-        self.declarations = []
-        if declarations:
-            self.declarations.extend(declarations.declarations)
-        if declaration:
-            self.declarations.append(declaration)
-
 class Declaration(Node):
     def __init__(self, type, inits, error):
         self.type = type
@@ -51,22 +43,8 @@ class Inits(Node):
         if init:
             self.inits.append(init)
 
-
-
-class Instructions(Node):
-    def __init__(self, instructions, instruction):
-        self.instructions = []
-        if instructions:
-            self.instructions.extend(instructions.instructions)
-        if instruction:
-            self.instructions.append(instruction)
-
 class Condition(Node):
     pass
-
-
-
-
 
 class Instruction(Node):
     pass
@@ -119,7 +97,6 @@ class Return(Instruction):
 class Continue(Instruction):
     pass
 
-
 class Break(Instruction):
     pass
 
@@ -127,15 +104,12 @@ class Compound(Instruction):
     def __init__(self, parts):
         self.parts = parts
 
-
 class Expression(Condition):
     pass
-
 
 class Const(Expression):
     def __init__(self, value):
         self.value = value
-
 
 class Id(Expression):
     def __init__(self, id):
@@ -146,14 +120,13 @@ class BinExpr(Expression):
         self.expr1 = left
         self.operator = op
         self.expr2 = right
-        self.children = ( left, right )
 
 class ExpressionInPar(Expression):
     def __init__(self, expression, error):
         self.expression = expression
         self.error = error
 
-class IdWithPar(Expression):
+class FunctionCall(Expression):
     def __init__(self, id, expression_list, error):
         self.id = id
         self.expression_list = expression_list
@@ -166,14 +139,6 @@ class ExpressionList(Node):
             self.expressions.extend(expr_list.expressions)
         if expression:
             self.expressions.append(expression)
-
-class FunctionDefinitions(Node):
-    def __init__(self, fundef, fundefs):
-        self.fundefs = []
-        if fundef:
-            self.fundefs.append(fundef)
-        if fundefs:
-            self.fundefs.extend(fundefs.fundefs)
 
 class FunctionDefinition(Node):
     def __init__(self, type, id, arglist, compound_instr):
@@ -194,8 +159,3 @@ class Argument(Node):
     def __init__(self, type, id):
         self.type = type
         self.id = id
-
-
-
-
-

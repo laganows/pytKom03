@@ -1,28 +1,56 @@
-from SymbolTable import SymbolTable, VariableSymbol, FunctionSymbol
+from SymbolTable import SymbolTable, VariableSymbol, Function
 import AST
 
 
 ttype = {}
-arithmetic_operators = ['+', '-', '*', '/', '%']
-bitwise_operators = ['|', '&', '^', '<<', '>>']
-logical_operators = ['&&', '||']
-comparison_operators = ['==', '!=', '>', '<', '<=', '>=']
-assignment_operators = ['=']
+operators = ['+', '-', '*', '/', '%','|', '&', '^', '<<', '>>','&&', '||','==', '!=', '>', '<', '<=', '>=','=']
+# arithmetic_operators = ['+', '-', '*', '/', '%']
+# bitwise_operators = ['|', '&', '^', '<<', '>>']
+# logical_operators = ['&&', '||']
+# comparison_operators = ['==', '!=', '>', '<', '<=', '>=']
+# assignment_operators = ['=']
 
-def all_operators():
-    return arithmetic_operators + bitwise_operators + logical_operators + assignment_operators + comparison_operators
+# def all_operators():
+#     return arithmetic_operators + bitwise_operators + logical_operators + assignment_operators + comparison_operators
 
 
-for operator in all_operators():
+for operator in operators:
     ttype[operator] = {}
     for type_ in ['int', 'float', 'string']:
         ttype[operator][type_] = {}
 
-for arithmetic_operator in arithmetic_operators:
-    ttype[arithmetic_operator]['int']['int'] = 'int'
-    ttype[arithmetic_operator]['int']['float'] = 'float'
-    ttype[arithmetic_operator]['float']['int'] = 'float'
-    ttype[arithmetic_operator]['float']['float'] = 'float'
+# for arithmetic_operator in arithmetic_operators:
+#     ttype[arithmetic_operator]['int']['int'] = 'int'
+#     ttype[arithmetic_operator]['int']['float'] = 'float'
+#     ttype[arithmetic_operator]['float']['int'] = 'float'
+#     ttype[arithmetic_operator]['float']['float'] = 'float'
+
+#arithmetic operations
+ttype['+']['int']['int'] = 'int'
+ttype['+']['int']['float'] = 'float'
+ttype['+']['float']['int'] = 'float'
+ttype['+']['float']['float'] = 'float'
+
+ttype['-']['int']['int'] = 'int'
+ttype['-']['int']['float'] = 'float'
+ttype['-']['float']['int'] = 'float'
+ttype['-']['float']['float'] = 'float'
+
+ttype['*']['int']['int'] = 'int'
+ttype['*']['int']['float'] = 'float'
+ttype['*']['float']['int'] = 'float'
+ttype['*']['float']['float'] = 'float'
+
+ttype['/']['int']['int'] = 'int'
+ttype['/']['int']['float'] = 'float'
+ttype['/']['float']['int'] = 'float'
+ttype['/']['float']['float'] = 'float'
+
+ttype['%']['int']['int'] = 'int'
+ttype['%']['int']['float'] = 'float'
+ttype['%']['float']['int'] = 'float'
+ttype['%']['float']['float'] = 'float'
+
 ttype['+']['string']['string'] = 'string'
 ttype['*']['string']['int'] = 'string'
 ttype['=']['float']['int'] = 'float'
@@ -31,15 +59,64 @@ ttype['=']['int']['int'] = 'int'
 ttype['=']['string']['string'] = 'string'
 ttype['=']['int']['float'] = ('int', 'warn')
 
-for operator in bitwise_operators + logical_operators:
-    ttype[operator]['int']['int'] = 'int'
+# for operator in bitwise_operators + logical_operators:
+#     ttype[operator]['int']['int'] = 'int'
 
-for comp_op in comparison_operators:
-    ttype[comp_op]['int']['int'] = 'int'
-    ttype[comp_op]['int']['float'] = 'int'
-    ttype[comp_op]['float']['int'] = 'int'
-    ttype[comp_op]['float']['float'] = 'int'
-    ttype[comp_op]['string']['string'] = 'int'
+#bitwise operations
+ttype['|']['int']['int'] = 'int'
+ttype['&']['int']['int'] = 'int'
+ttype['^']['int']['int'] = 'int'
+ttype['<<']['int']['int'] = 'int'
+ttype['>>']['int']['int'] = 'int'
+
+#logic operators
+ttype['&&']['int']['int'] = 'int'
+ttype['||']['int']['int'] = 'int'
+
+
+#comparison operators
+ttype['==']['int']['int'] = 'int'
+ttype['==']['int']['float'] = 'int'
+ttype['==']['float']['int'] = 'int'
+ttype['==']['float']['float'] = 'int'
+ttype['==']['string']['string'] = 'int'
+
+ttype['!=']['int']['int'] = 'int'
+ttype['!=']['int']['float'] = 'int'
+ttype['!=']['float']['int'] = 'int'
+ttype['!=']['float']['float'] = 'int'
+ttype['!=']['string']['string'] = 'int'
+
+ttype['>']['int']['int'] = 'int'
+ttype['>']['int']['float'] = 'int'
+ttype['>']['float']['int'] = 'int'
+ttype['>']['float']['float'] = 'int'
+ttype['>']['string']['string'] = 'int'
+
+ttype['<']['int']['int'] = 'int'
+ttype['<']['int']['float'] = 'int'
+ttype['<']['float']['int'] = 'int'
+ttype['<']['float']['float'] = 'int'
+ttype['<']['string']['string'] = 'int'
+
+ttype['<=']['int']['int'] = 'int'
+ttype['<=']['int']['float'] = 'int'
+ttype['<=']['float']['int'] = 'int'
+ttype['<=']['float']['float'] = 'int'
+ttype['<=']['string']['string'] = 'int'
+
+ttype['>=']['int']['int'] = 'int'
+ttype['>=']['int']['float'] = 'int'
+ttype['>=']['float']['int'] = 'int'
+ttype['>=']['float']['float'] = 'int'
+ttype['>=']['string']['string'] = 'int'
+
+# for comp_op in comparison_operators:
+#     ttype[comp_op]['int']['int'] = 'int'
+#     ttype[comp_op]['int']['float'] = 'int'
+#     ttype[comp_op]['float']['int'] = 'int'
+#     ttype[comp_op]['float']['float'] = 'int'
+#     ttype[comp_op]['string']['string'] = 'int'
 
     
     
@@ -76,7 +153,6 @@ class NodeVisitor(object):
 
 class TypeChecker(NodeVisitor):
 
-
     def findVariable(self, tab, variable):
         if variable in tab.symbols:
             return tab.get(variable)
@@ -90,18 +166,15 @@ class TypeChecker(NodeVisitor):
         self.scope = tab
         self.actFunc = None
         self.actComp = None
+        self.actLoop = None
         self.visit(node.parts, tab)
         
     def visit_Parts(self, node, tab):
-        for block in node.parts:
-            self.visit(block, tab)
+        for part in node.parts:
+            self.visit(part, tab)
             
-    def visit_Block(self, node, tab):
+    def visit_Part(self, node, tab):
         pass
-        
-    #def visit_Declarations(self, node, tab):
-    #    for declaration in node.declarations:
-    #        self.visit(declaration, tab)
 
     def visit_Declaration(self, node, tab):
         self.visit(node.inits, tab, node.type)
@@ -112,7 +185,7 @@ class TypeChecker(NodeVisitor):
 
     def visit_Init(self, node, tab, type):
         if node.id in tab.symbols:
-            print "Error: Duplicated usage of symbol {0}, line {1}".format(node.id, node.line)
+            print "Error: Variable '{0}' already declared: line {1}".format(node.id, node.line)
 
         value_type = self.visit(node.expression, tab)
         
@@ -168,39 +241,38 @@ class TypeChecker(NodeVisitor):
         
     def visit_While(self, node, tab):
         self.visit(node.cond, tab)
+        self.actLoop = node
         self.visit(node.statement, tab)
+        self.actLoop = None
 
     def visit_RepeatUntil(self, node, tab):
-        self.visit(node.cond, tab)
         self.visit(node.statement, tab)
+        self.actLoop = node
+        self.visit(node.cond, tab)
+        self.actLoop = None
+
 
     def visit_Return(self, node, tab):
         if not type(self.actFunc)==AST.FunctionDefinition:
-            print "Error: Return placed outside of a function, line {0}".format(node.line-2)
+            print "Error: Return instruction outside a function: line {0}".format(node.line-2)
         else:
             rettype = self.visit(node.expression, tab)
             if rettype != self.actFunc.type:
-                print "Error: Invalid return type of {0}, expected {2}, line {1}".format(rettype, node.line-1, self.actFunc.type)
+                print "Error: Improper returned type, expected {2}, got {0}: line {1}".format(rettype, node.line-1, self.actFunc.type)
             self.hasReturn = True
-   
-        
-        
-    def visit_Continue(self, node, tab):
-        if not type(self.actComp)==AST.Compound:
-            print "Error: continue placed outside of a loop, line {0}".format(node.line-1)
-        
 
-    def visit_Break(self, node, tab):
-        if not type(self.actComp)==AST.Compound:
-            print "Error: break placed outside of a loop, line {0}".format(node.line-1)
-        
-        
+    def visit_Continue(self, node, tab):
+        if not type(self.actLoop)==AST.While and not type(self.actLoop)==AST.RepeatUntil:
+            print "Error: continue instruction outside a loop: line {0}".format(node.line-1)
+
+    def visit_Break(self, node, tab): #node - wezel drzewa
+        if not type(self.actLoop)==AST.While and not type(self.actLoop)==AST.RepeatUntil:
+            print "Error: break instruction outside a loop: line {0}".format(node.line-1)
+
     def visit_Compound(self, node, tab, *args):
         if len(args) > 0 and args[0] is True:
             self.visit(node.parts, tab)
         else:
-            #new_tab = SymbolTable(tab, None, None)
-            #self.visit(node.parts, new_tab)
             tab = tab.pushScope(node)
             self.actComp = node
             self.visit(node.parts, tab)
@@ -230,18 +302,15 @@ class TypeChecker(NodeVisitor):
     def visit_Id(self, node, tab):
         variable = self.findVariable(tab, node.id)
         if variable is None:
-            print "Error: Symbol {0} not declared before, line {1}".format(node.id, node.line)
+            print "Error: Usage of undeclared variable '{0}': line {1}".format(node.id, node.line)
         else:
             return variable.type
             
     def visit_BinExpr(self, node, tab):                                         
         type1 = self.visit(node.expr1, tab)    
         type2 = self.visit(node.expr2, tab)    
-        op    = node.operator;
+        op = node.operator;
         if type1 is None or not type2 in ttype[op][type1]:
-            #print op
-            #print type1
-            #print type2
             print "Error: Incompatible types, line", node.line
         else:
             return ttype[op][type1][type2]
@@ -250,20 +319,19 @@ class TypeChecker(NodeVisitor):
         expression = node.expression
         return self.visit(expression, tab)
 
-    def visit_IdWithPar(self, node, tab):
+    def visit_FunctionCall(self, node, tab):
         function = self.findVariable(tab, node.id)
         if function is None:
-            print "Error: Function {0} not declared before, line {1}".format(node.id, node.line)
+            print "Error: Call of undefined fun: '{0}': line {1}".format(node.id, node.line)
         else:
             if len(function.arguments.arg_list) != len(node.expression_list.expressions):
-                print "Error: Wrong number of arguments in {0} call, line {1}".format(node.id, node.line)
+                print "Error: Improper number of args in {0} call: line {1}".format(node.id, node.line)
             else:
                 for i in range(len(function.arguments.arg_list)):
                     arg_type = function.arguments.arg_list[i].type
                     given_type = self.visit(node.expression_list.expressions[i], tab)
                     if not given_type in ttype['='][arg_type]:
-                        print "Error: Incompatible types of arguments in {0} call, line {1}".format(node.id, node.line)
-                        #return None
+                        print "Error: Improper type of args in {0} call: line {1}".format(node.id, node.line)
                         break
                     
             self.visit(node.expression_list, tab)
@@ -282,9 +350,9 @@ class TypeChecker(NodeVisitor):
         if not fun_name is None:
             print "Error: Symbol {0} declared before, line {1}".format(node.id, node.arglist.line)
         else:
-            tab.put(node.id, FunctionSymbol(node.id, node.type, node.arglist))
+            tab.put(node.id, Function(node.id, node.type, node.arglist))
             tab = tab.pushScope(node.id)
-            tab.put(node.id, FunctionSymbol(node.id, node.type, node.arglist))
+            tab.put(node.id, Function(node.id, node.type, node.arglist))
             self.actFunc = node
             self.hasReturn = False
             self.visit(node.arglist, tab)
@@ -302,7 +370,7 @@ class TypeChecker(NodeVisitor):
 
     def visit_Argument(self, node, tab):
         if node.id in tab.symbols:
-                print "Error: Duplicated usage of symbol {0}, line {1}".format(node.id, node.line)
+            print "Error: Duplicated usage of symbol {0}, line {1}".format(node.id, node.line)
         else:
             tab.put(node.id, VariableSymbol(node.id, node.type, None))
             return node.type

@@ -25,11 +25,6 @@ class TreePrinter:
         for part in self.parts:
             part.print_tree(indent)
 
-    @add_to_class(AST.Declarations)
-    def print_tree(self, indent):
-        for declaration in self.declarations:
-            declaration.print_tree(indent)
-
     @add_to_class(AST.Declaration)
     def print_tree(self, indent):
         if not self.error:
@@ -50,11 +45,6 @@ class TreePrinter:
     @add_to_class(AST.Id)
     def print_tree(self, indent):
         self.print_indented(self.id, indent)
-
-    @add_to_class(AST.Instructions)
-    def print_tree(self, indent):
-        for instruction in self.instructions:
-            instruction.print_tree(indent)
 
     @add_to_class(AST.Print)
     def print_tree(self, indent):
@@ -137,7 +127,7 @@ class TreePrinter:
     def print_tree(self, indent):
         self.expression.print_tree(indent)
 
-    @add_to_class(AST.IdWithPar)
+    @add_to_class(AST.FunctionCall)
     def print_tree(self, indent):
         TreePrinter.print_indented("FUNCALL", indent)
         TreePrinter.print_indented(self.id, indent + 1)
@@ -147,11 +137,6 @@ class TreePrinter:
     def print_tree(self, indent):
         for expression in self.expressions:
             expression.print_tree(indent)
-
-    @add_to_class(AST.FunctionDefinitions)
-    def print_tree(self, indent):
-        for function in self.fundefs:
-            function.print_tree(indent)
 
     @add_to_class(AST.FunctionDefinition)
     def print_tree(self, indent):
@@ -169,5 +154,3 @@ class TreePrinter:
     @add_to_class(AST.Argument)
     def print_tree(self, indent):
         TreePrinter.print_indented("ARG " + self.id, indent)
-
-
